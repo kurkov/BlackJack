@@ -3,19 +3,31 @@ package server;
 import model.Card;
 import model.Deck;
 
-import java.util.ArrayList;
-
 public interface Server {
 
-    public int getConnection();
+    String[] getConnection();
 
-    public int getUserBet();
+    int getUserBet(int userId);
 
-    public void setUserBet(int userBet);
+    void setUserBet(int userId, int userBet);
 
-    public ArrayList<Card> getHand();
+    int getUserMoney(int userId);
 
-    public Card getCardFromDeck();
+    void setUserMoney(int userId, int money);
+
+    String getHand(int userId);
+
+    Card getCardFromDeck();
 
     Deck getDeck();
+
+    String makeUserAction(int userId, String action);
+
+    String getUserCardsToString(int userId);
+
+    int getUserPoints(int userId);
+
+    int getDealerPoints();
+
+    String getDealerCardsToString();
 }

@@ -1,13 +1,15 @@
 package client;
 
-import model.Card;
-import model.User;
 import server.Server;
 import server.ServerImpl;
 
 public class GameController {
 
-    private static final int INITIAL_CASH = 100;
+    private static int userId;
+    private static int userMoney;
+    private static int userBet;
+    private static String userHand;
+    private static int userPoints;
 
     public static void main(String[] args) {
 
@@ -15,67 +17,90 @@ public class GameController {
         Output output = new Output();
         Input input = new Input();
 
-        int connection = server.getConnection();
-        if (connection == 1) {
+        String[] connection = getConnection(server, output);
+
+        if ("1".equals(connection[0])) {
+            output.startGame();
+
+            userId = Integer.parseInt(connection[1]);
+
+            getUserMoney(server);
+
+            while (userMoney > 0) {
+
+                askBetFromUser(server, input, output);
+
+                sendBetToServer(server);
+
+                String serverResult = "continue";
+
+                while ("continue".equals(serverResult)) {
+
+                    showHandToUser(server, output);
+
+                    String userAction = getVerifiedUserAction(input, output);
+
+                    serverResult = sendActionToServer(server, userAction);
+
+                    showResultToUser(server, output, serverResult);
+                }
+            }
+        }
+    }
+
+    private static String[] getConnection(Server server, Output output) {
+        String[] connection = server.getConnection();
+
+        if ("1".equals(connection[0])) {
             output.isConnected();
         } else {
             output.isNotConnected();
         }
 
-        if (connection == 1) {
-
-            User user = new User(INITIAL_CASH);
-
-            output.startGame();
-
-            while (user.getMoney() > 0) {
-
-                output.showUserMoney(user);
-                output.askBetAmount();
-                int betAmount = input.getBetAmount(user);
-                user.setBet(betAmount);
-
-                user.setMoney(user.getMoney() - user.getBet());
-                output.showUserMoneyAfterBet(user);
-
-                sendBetToServer(server, user.getBet());
-
-                user.getNewHand(server.getHand());
-                output.showUserHand(user);
-                user.showHand();
-
-
-                while (user.getHandPoints() <= 21) {
-                    String action = getVerifiedUserAction(output, input);
-
-                    if ("h".equals(action)) {
-                        doActionHit(server, output, user);
-                        sendUserStateToServer(server, user);
-                    } else if ("s".equals(action)) {
-                        //todo stand
-                    } else if ("d".equals(action)) {
-                        //todo double
-                    }
-                }
-
-            }
-        }
+        return connection;
     }
 
-    private static void doActionHit(Server server, Output output, User user) {
-        Card card = server.getCardFromDeck();
-        user.addCardToHand(card);
-        output.showUserHand(user);
-        user.showHand();
+    private static void getUserMoney(Server server) {
+        userMoney = server.getUserMoney(userId);
     }
 
-    private static String getVerifiedUserAction(Output output, Input input) {
+    private static void askBetFromUser(Server server, Input input, Output output) {
+        getUserMoney(server);
+        output.showUserMoney(userMoney);
+        output.askBetAmount();
+        userBet = input.getBetAmount(userMoney);
+    }
+
+    private static void sendBetToServer(Server server) {
+        server.setUserBet(userId, userBet);
+        userHand = server.getHand(userId);
+    }
+
+    private static void showHandToUser(Server server, Output output) {
+        userPoints = server.getUserPoints(userId);
+        userHand = server.getUserCardsToString(userId);
+        output.showUserHand(userPoints, userHand);
+
+        int dealerPoints = server.getDealerPoints();
+        String dealerHand = server.getDealerCardsToString();
+        output.showDealerHand(dealerPoints, dealerHand);
+    }
+
+    private static String getUserAction(Input input, Output output) {
+        String action;
+        output.askUserAction();
+        action = input.getUserAction();
+
+        return action;
+    }
+
+    private static String getVerifiedUserAction(Input input, Output output) {
         String action = null;
         boolean incorrectAction = false;
 
         do {
             try {
-                action = getUserAction(output, input);
+                action = getUserAction(input, output);
 
                 if ("s".equals(action) || "h".equals(action) || "d".equals(action)) {
                     incorrectAction = false;
@@ -93,19 +118,25 @@ public class GameController {
         return action;
     }
 
-    private static String getUserAction(Output output, Input input) {
-        String action;
-        output.askUserAction();
-        action = input.getUserAction();
-
-        return action;
+    private static String sendActionToServer(Server server, String userAction) {
+        String serverResult = server.makeUserAction(userId, userAction);
+        return serverResult;
     }
 
-    private static void sendBetToServer(Server server, int bet) {
-        server.setUserBet(bet);
-    }
+    static void showResultToUser(Server server, Output output, String serverResult) {
+        getUserMoney(server);
+        showHandToUser(server, output);
 
-    private static void sendUserStateToServer(Server server, User user) {
-
+        if ("win".equals(serverResult)) {
+            output.youWin();
+        } else if ("bust".equals(serverResult)) {
+            //todo
+            output.goingBust();
+        } else if ("push".equals(serverResult)) {
+            //todo
+            output.gamePush();
+        } else if ("continue".equals(serverResult)) {
+            //todo
+        }
     }
 }

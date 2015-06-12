@@ -1,5 +1,5 @@
-import model.Deck;
-import model.Hand;
+package model;
+
 import org.junit.Test;
 import server.Server;
 import server.ServerImpl;
@@ -32,19 +32,21 @@ public class DeckTest {
     @Test
     public void testGetHandFromSmallDeck() {
         Server server = new ServerImpl();
+        String[] connection = server.getConnection();
+        int userId = Integer.parseInt(connection[1]);
         Deck deck = server.getDeck();
         int deckSize = deck.getDeckSize();
 
         for (int i = 0; i < deckSize - 1; i++) {
-            deck.cardArrayList.remove(0);
+            deck.cardList.remove(0);
         }
 
         int expected = 1;
         int actual = deck.getDeckSize();
         assertEquals(expected, actual);
 
-        server.getHand();
-        expected = 50;
+        server.getHand(userId);
+        expected = 48;
         actual = server.getDeck().getDeckSize();
         assertEquals(expected, actual);
     }

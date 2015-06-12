@@ -24,8 +24,8 @@ public class Output {
         System.out.println("You don't have enough money to make such bet. Please make smaller bet");
     }
 
-    public void showUserMoney(User user) {
-        System.out.println("You have: $" + user.getMoney());
+    public void showUserMoney(int money) {
+        System.out.println("You have: $" + money);
     }
 
     public void showUserMoneyAfterBet(User user) {
@@ -36,8 +36,14 @@ public class Output {
         System.out.println("What would you like to do? (s = STAND, h = HIT, d = DOUBLE)");
     }
 
-    public void showUserHand(User user) {
-        System.out.println("Your hand is (" + user.getHandPoints() + " points):");
+    public void showUserHand(int userPoints, String userCards) {
+        System.out.println("Your hand is (" + userPoints + " points):");
+        System.out.println(userCards);
+    }
+
+    public void showDealerHand(int dealerPoints, String dealerHand) {
+        System.out.println("Dealer's hand is (" + dealerPoints + " points):");
+        System.out.println(dealerHand);
     }
 
     public void incorrectAction() {
@@ -46,5 +52,17 @@ public class Output {
 
     public void actionNull() {
         System.out.println("Game stopped. Program Error: action = null");
+    }
+
+    public void youWin() {
+        System.out.println("Congratulations. You win!\n");
+    }
+
+    public void goingBust() {
+        System.out.println("You busted!\n");
+    }
+
+    public void gamePush() {
+        System.out.println("Push...\n");
     }
 }

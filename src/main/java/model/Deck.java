@@ -2,50 +2,51 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class Deck {
     
-    public ArrayList<Card> cardArrayList;
+    public List<Card> cardList;
 
     public Deck() {
 
-        cardArrayList = new ArrayList<Card>();
+        cardList = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
             for (int j = 1; j <= 13; j++) {
-                cardArrayList.add(new Card(i, j));
+                cardList.add(new Card(i, j));
             }
         }
     }
 
     public void shuffle(){
-        Collections.shuffle(cardArrayList);
+        Collections.shuffle(cardList);
     }
 
     public int getDeckSize(){
-        return cardArrayList.size();
+        return cardList.size();
     }
 
     public Card takeCard() {
-        if (this.cardArrayList.size() == 0) {
+        if (cardList.size() == 0) {
             Deck deck = new Deck();
             deck.shuffle();
-            this.cardArrayList = deck.getCardArrayList();
+            cardList = deck.getCardList();
         }
-        Card card = cardArrayList.get(0);
-        cardArrayList.remove(0);
+        Card card = cardList.get(0);
+        cardList.remove(0);
         return card;
     }
 
     public String toString() {
         StringBuilder result = new StringBuilder();
-        for (Card card : cardArrayList) {
+        for (Card card : cardList) {
             result.append(card.toString()).append("\n");
         }
         return result.toString();
     }
 
-    public ArrayList<Card> getCardArrayList() {
-        return cardArrayList;
+    public List<Card> getCardList() {
+        return cardList;
     }
 }

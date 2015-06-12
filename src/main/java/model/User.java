@@ -1,17 +1,24 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class User {
 
+    private int id;
+
     private int money;
     private int bet;
-
-    private ArrayList<Card> hand;
+    private List<Card> hand;
 
     public User(int money) {
         this.money = money;
-        hand = new ArrayList<Card>();
+        hand = new ArrayList<>();
+    }
+
+    // this constructor is for Dealer
+    public User() {
+        hand = new ArrayList<>();
     }
 
     public int getMoney() {
@@ -30,20 +37,21 @@ public class User {
         this.bet = bet;
     }
 
-    public ArrayList<Card> getHand() {
+    public List<Card> getHand() {
         return hand;
     }
 
-    public void getNewHand(ArrayList<Card> hand) {
+    public void setHand(List<Card> hand) {
         this.hand = hand;
     }
 
-    public void showHand(){
+    public String showHand(){
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < hand.size(); i++) {
             result.append(hand.get(i).toString()).append("\n");
         }
-        System.out.println(result);
+
+        return result.toString();
     }
 
     public void addCardToHand(Card card) {
@@ -56,5 +64,13 @@ public class User {
             points += hand.get(i).getCardPoints();
         }
         return points;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

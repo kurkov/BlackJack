@@ -1,10 +1,11 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class Hand extends Deck {
+public class Hand {
 
-    private ArrayList<Card> hand;
+    private List<Card> hand;
 
     public Hand(Deck deck) {
         hand = new ArrayList<>();
@@ -13,7 +14,7 @@ public class Hand extends Deck {
         }
     }
 
-    public ArrayList<Card> getHand() {
+    public List<Card> getCards() {
         return hand;
     }
 }
