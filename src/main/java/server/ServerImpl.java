@@ -15,6 +15,10 @@ public class ServerImpl implements Server {
 
     private Deck deck = new Deck();
 
+    public ServerImpl() {
+        deck.shuffle();
+    }
+
     @Override
     public int getConnection() {
         // connected
@@ -47,7 +51,7 @@ public class ServerImpl implements Server {
 
     @Override
     public Card getCardFromDeck() {
-        return deck.takeCard(deck);
+        return deck.takeCard();
     }
 
     @Override

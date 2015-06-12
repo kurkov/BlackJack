@@ -1,5 +1,3 @@
-package tests.java;
-
 import model.Deck;
 import model.Hand;
 import org.junit.Test;
@@ -38,7 +36,7 @@ public class DeckTest {
         int deckSize = deck.getDeckSize();
 
         for (int i = 0; i < deckSize - 1; i++) {
-            deck.deck.remove(0);
+            deck.cardArrayList.remove(0);
         }
 
         int expected = 1;
