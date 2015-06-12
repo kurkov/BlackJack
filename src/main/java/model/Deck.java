@@ -37,10 +37,10 @@ public class Deck {
     }
 
     public String toString() {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (Card card : deck) {
-            result += card.toString() + "\n";
+            result.append(card.toString()).append("\n");
         }
-        return result;
+        return result.toString();
     }
 }

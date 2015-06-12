@@ -130,9 +130,4 @@ public class Card {
   public void setCardPoints(int cardPoints) {
     this.cardPoints = cardPoints;
   }
-
-  public static void main(String[] args) {
-    Card card = new Card(DIAMONDS, KING);
-    System.out.println(card.toString() + " " + card.getCardPoints());
-  }
 }

@@ -39,9 +39,9 @@ public class User {
     }
 
     public void showHand(){
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < hand.size(); i++) {
-            result += hand.get(i).toString() + "\n";
+            result.append(hand.get(i).toString()).append("\n");
         }
         System.out.println(result);
     }
