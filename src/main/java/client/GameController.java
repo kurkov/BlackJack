@@ -47,12 +47,13 @@ public class GameController {
 
                 while (user.getHandPoints() <= 21) {
                     String action = getVerifiedUserAction(output, input);
-                    if (action.equals("h")) {
+
+                    if ("h".equals(action)) {
                         doActionHit(server, output, user);
                         sendUserStateToServer(server, user);
-                    } else if (action.equals("s")) {
+                    } else if ("s".equals(action)) {
                         //todo stand
-                    } else if (action.equals("d")) {
+                    } else if ("d".equals(action)) {
                         //todo double
                     }
                 }
@@ -69,17 +70,26 @@ public class GameController {
     }
 
     private static String getVerifiedUserAction(Output output, Input input) {
-        String action;
-        boolean incorrectAction;
+        String action = null;
+        boolean incorrectAction = false;
+
         do {
-            action = getUserAction(output, input);
-            if (action.equals("s") || action.equals("h") || action.equals("d")) {
-                incorrectAction = false;
-            } else {
-                incorrectAction = true;
-                output.incorrectAction();
+            try {
+                action = getUserAction(output, input);
+
+                if ("s".equals(action) || "h".equals(action) || "d".equals(action)) {
+                    incorrectAction = false;
+                } else {
+                    incorrectAction = true;
+                    output.incorrectAction();
+                }
+            } catch (NullPointerException e) {
+                output.actionNull();
+                System.out.println(e.toString());
+                System.exit(0);
             }
         } while (incorrectAction);
+
         return action;
     }
 
@@ -87,6 +97,7 @@ public class GameController {
         String action;
         output.askUserAction();
         action = input.getUserAction();
+
         return action;
     }
 

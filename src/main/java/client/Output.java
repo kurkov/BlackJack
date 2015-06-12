@@ -43,4 +43,8 @@ public class Output {
     public void incorrectAction() {
         System.out.println("Incorrect action!");
     }
+
+    public void actionNull() {
+        System.out.println("Game stopped. Program Error: action = null");
+    }
 }
