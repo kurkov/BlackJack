@@ -1,7 +1,5 @@
 package client;
 
-import model.User;
-
 public class Output {
 
     public void isConnected() {
@@ -28,8 +26,8 @@ public class Output {
         System.out.println("You have: $" + money);
     }
 
-    public void showUserMoneyAfterBet(User user) {
-        System.out.println("You made bet. Money left: $" + user.getMoney());
+    public void showUserMoneyAfterBet(int money) {
+        System.out.println("You made bet. Money left: $" + money + "\n");
     }
 
     public void askUserAction() {

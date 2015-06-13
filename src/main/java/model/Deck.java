@@ -19,11 +19,11 @@ public class Deck {
         }
     }
 
-    public void shuffle(){
+    public void shuffle() {
         Collections.shuffle(cardList);
     }
 
-    public int getDeckSize(){
+    public int getDeckSize() {
         return cardList.size();
     }
 

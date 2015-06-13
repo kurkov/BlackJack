@@ -30,7 +30,7 @@ public class GameController {
 
                 askBetFromUser(server, input, output);
 
-                sendBetToServer(server);
+                sendBetToServer(server, output);
 
                 String serverResult = "continue";
 
@@ -71,9 +71,11 @@ public class GameController {
         userBet = input.getBetAmount(userMoney);
     }
 
-    private static void sendBetToServer(Server server) {
+    private static void sendBetToServer(Server server, Output output) {
         server.setUserBet(userId, userBet);
         userHand = server.getHand(userId);
+        getUserMoney(server);
+        output.showUserMoneyAfterBet(userMoney);
     }
 
     private static void showHandToUser(Server server, Output output) {
@@ -130,13 +132,9 @@ public class GameController {
         if ("win".equals(serverResult)) {
             output.youWin();
         } else if ("bust".equals(serverResult)) {
-            //todo
             output.goingBust();
         } else if ("push".equals(serverResult)) {
-            //todo
             output.gamePush();
-        } else if ("continue".equals(serverResult)) {
-            //todo
         }
     }
 }

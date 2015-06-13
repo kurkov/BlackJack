@@ -45,7 +45,7 @@ public class User {
         this.hand = hand;
     }
 
-    public String showHand(){
+    public String showHand() {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < hand.size(); i++) {
             result.append(hand.get(i).toString()).append("\n");
@@ -58,7 +58,7 @@ public class User {
         hand.add(card);
     }
 
-    public int getHandPoints(){
+    public int getHandPoints() {
         int points = 0;
         for (int i = 0; i < hand.size(); i++) {
             points += hand.get(i).getCardPoints();

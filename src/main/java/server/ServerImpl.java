@@ -162,7 +162,6 @@ public class ServerImpl implements Server {
     }
 
     private String checkGameResults(int userId) {
-        //todo check
         String serverResult = "-1";
         int dealerPoints = dealer.getHandPoints();
         int userPoints = userList.get(userId).getHandPoints();
