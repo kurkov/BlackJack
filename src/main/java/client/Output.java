@@ -27,11 +27,11 @@ public class Output {
     }
 
     public void showUserMoney(int money) {
-        System.out.println("You have: $" + money);
+        System.out.format("You have: $%d%n", money);
     }
 
     public void showUserMoneyAfterBet(int money) {
-        System.out.println("You made bet. Money left: $" + money + "\n");
+        System.out.format("You made bet. Money left: $%d%n%n", money);
     }
 
     public void askUserAction() {
@@ -39,12 +39,12 @@ public class Output {
     }
 
     public void showUserHand(int userPoints, String userCards) {
-        System.out.println("Your hand is (" + userPoints + " points):");
+        System.out.format("Your hand is (%d points):%n", userPoints);
         System.out.println(userCards);
     }
 
     public void showDealerHand(int dealerPoints, String dealerHand) {
-        System.out.println("Dealer's hand is (" + dealerPoints + " points):");
+        System.out.format("Dealer's hand is (%d points):%n", dealerPoints);
         System.out.println(dealerHand);
     }
 
@@ -77,7 +77,7 @@ public class Output {
     }
 
     public void madeDouble(int userBet, int userMoney) {
-        System.out.format("You made Double. Your bet is: $%d. Money left: $%d\n\n", userBet, userMoney);
+        System.out.format("You made Double. Your bet is: $%d. Money left: $%d%n%n", userBet, userMoney);
     }
 
     public void techWin() {
