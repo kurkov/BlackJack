@@ -19,6 +19,10 @@ public class ServerImpl implements Server {
 
     private static Deck deck = new Deck();
 
+    private int previousUserPoints;
+    private int previousDealerPoints;
+    private int standCounter;
+
     public ServerImpl() {
         deck.shuffle();
         dealer = new User();
@@ -131,11 +135,12 @@ public class ServerImpl implements Server {
         String serverResult = "-1";
         if ("h".equals(action)) {
             doActionHit(userId);
+            standCounter = 0;
         } else if ("s".equals(action)) {
             // just stand
         } else if ("d".equals(action)) {
-            //todo double
             doActionDouble(userId);
+            standCounter = 0;
         }
 
         makeDealerAction();
@@ -149,15 +154,18 @@ public class ServerImpl implements Server {
         user.addCardToHand(getCardFromDeck());
     }
 
-    private String doActionDouble(int userId) {
-        //todo double
-        return null;
+    private void doActionDouble(int userId) {
+        User user = userList.get(userId);
+        user.setMoney(user.getMoney() - user.getBet());
+        user.setBet(user.getBet() * 2);
+        user.addCardToHand(getCardFromDeck());
     }
 
     private void makeDealerAction() {
         int dealerPoints = getDealerPoints();
         if (dealerPoints < 17) {
             dealer.addCardToHand(getCardFromDeck());
+            standCounter = 0;
         }
     }
 
@@ -166,32 +174,62 @@ public class ServerImpl implements Server {
         int dealerPoints = dealer.getHandPoints();
         int userPoints = userList.get(userId).getHandPoints();
 
-        if (dealerPoints > 21 || userPoints > 21) {
-            if ((userPoints <= 21 && dealerPoints > 21) || (userPoints <= 21 && dealerPoints < 21)) {
-                serverResult = "win";
+        if (dealerPoints == previousDealerPoints && userPoints == previousUserPoints) {
+            standCounter++;
+        }
 
-                // send the won money to user
-                User user = userList.get(userId);
-                int userBet = user.getBet();
-                int money = userBet * 2;
-                userList.get(userId).setMoney(money);
+        if ((dealerPoints == 21 && userPoints == 21) || (userPoints > 21 && dealerPoints > 21)) {
+            serverResult = "push";
+            doPushServerAction(userId);
+
+        } else if (dealerPoints > 21 || userPoints > 21) {
+
+            if (userPoints <= 21 && dealerPoints > 21) {
+                serverResult = "win";
+                doWinServerAction(userId);
 
             } else if (dealerPoints <= 21 && userPoints > 21) {
                 serverResult = "bust";
             }
 
-        } else if (dealerPoints == 21 && userPoints == 21) {
-            serverResult = "push";
-
-            // send money back to user
-            int userBet = userList.get(userId).getBet();
-            int userMoney = userList.get(userId).getMoney();
-            userList.get(userId).setMoney(userMoney + userBet);
-
         } else if (userPoints < 21 && dealerPoints < 21) {
             serverResult = "continue";
         }
 
+        previousDealerPoints = dealer.getHandPoints();
+        previousUserPoints = userList.get(userId).getHandPoints();
+
+        if (standCounter == 1) {
+
+            if (userPoints <= 21 && userPoints > dealerPoints) {
+                serverResult = "techwin";
+                doWinServerAction(userId);
+
+            } else if (dealerPoints <= 21 && dealerPoints > userPoints) {
+                serverResult = "techlose";
+
+            } else if (userPoints == dealerPoints) {
+                serverResult = "push";
+                doPushServerAction(userId);
+            }
+        }
+
         return serverResult;
+    }
+
+    private void doWinServerAction(int userId) {
+        // send the won money to user
+        User user = userList.get(userId);
+        int userBet = user.getBet();
+        int userMoney = user.getMoney();
+        int money = userMoney + (userBet * 2);
+        userList.get(userId).setMoney(money);
+    }
+
+    private void doPushServerAction(int userId) {
+        // send money back to user
+        int userBet = userList.get(userId).getBet();
+        int userMoney = userList.get(userId).getMoney();
+        userList.get(userId).setMoney(userMoney + userBet);
     }
 }

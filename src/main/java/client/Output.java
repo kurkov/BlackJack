@@ -22,6 +22,10 @@ public class Output {
         System.out.println("You don't have enough money to make such bet. Please make smaller bet");
     }
 
+    public void cantMakeZeroBet() {
+        System.out.println("Zero bet is not allowed");
+    }
+
     public void showUserMoney(int money) {
         System.out.println("You have: $" + money);
     }
@@ -45,11 +49,15 @@ public class Output {
     }
 
     public void incorrectAction() {
-        System.out.println("Incorrect action!");
+        System.out.println("Incorrect action!\n");
+    }
+
+    public void numbersOnly() {
+        System.out.println("Write numbers only!");
     }
 
     public void actionNull() {
-        System.out.println("Game stopped. Program Error: action = null");
+        System.out.println("Game stopped. Program Error: action = null\n");
     }
 
     public void youWin() {
@@ -62,5 +70,25 @@ public class Output {
 
     public void gamePush() {
         System.out.println("Push...\n");
+    }
+
+    public void cantMakeDouble() {
+        System.out.println("You don't have enough money to Double!\n");
+    }
+
+    public void madeDouble(int userBet, int userMoney) {
+        System.out.format("You made Double. Your bet is: $%d. Money left: $%d\n\n", userBet, userMoney);
+    }
+
+    public void techWin() {
+        System.out.println("2 time stand. Congratulations. You win by points!\n");
+    }
+
+    public void techLose() {
+        System.out.println("2 time stand. You lose by points!\n");
+    }
+
+    public void gameOver() {
+        System.out.println("You don't have money to play. Game over :)");
     }
 }

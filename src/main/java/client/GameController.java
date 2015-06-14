@@ -34,17 +34,19 @@ public class GameController {
 
                 String serverResult = "continue";
 
+                showHandToUser(server, output);
+
                 while ("continue".equals(serverResult)) {
 
-                    showHandToUser(server, output);
-
-                    String userAction = getVerifiedUserAction(input, output);
+                    String userAction = getVerifiedUserAction(server, input, output);
 
                     serverResult = sendActionToServer(server, userAction);
 
                     showResultToUser(server, output, serverResult);
                 }
             }
+
+            output.gameOver();
         }
     }
 
@@ -96,7 +98,7 @@ public class GameController {
         return action;
     }
 
-    private static String getVerifiedUserAction(Input input, Output output) {
+    private static String getVerifiedUserAction(Server server, Input input, Output output) {
         String action = null;
         boolean incorrectAction = false;
 
@@ -105,11 +107,19 @@ public class GameController {
                 action = getUserAction(input, output);
 
                 if ("s".equals(action) || "h".equals(action) || "d".equals(action)) {
-                    incorrectAction = false;
+
+                    if ("s".equals(action) || "h".equals(action)) {
+                        incorrectAction = false;
+
+                    } else if ("d".equals(action)) {
+                        incorrectAction = checkBeforeDouble(server, output);
+                    }
+
                 } else {
                     incorrectAction = true;
                     output.incorrectAction();
                 }
+
             } catch (NullPointerException e) {
                 output.actionNull();
                 System.out.println(e.toString());
@@ -118,6 +128,23 @@ public class GameController {
         } while (incorrectAction);
 
         return action;
+    }
+
+    private static boolean checkBeforeDouble(Server server, Output output) {
+        boolean incorrectAction = true;
+        getUserMoney(server);
+
+        if (userBet > userMoney) {
+            output.cantMakeDouble();
+        } else if (userBet <= userMoney) {
+            //make double
+            userMoney = userMoney - userBet;
+            userBet = userBet * 2;
+            output.madeDouble(userBet, userMoney);
+            incorrectAction = false;
+        }
+
+        return incorrectAction;
     }
 
     private static String sendActionToServer(Server server, String userAction) {
@@ -135,6 +162,10 @@ public class GameController {
             output.goingBust();
         } else if ("push".equals(serverResult)) {
             output.gamePush();
+        } else if ("techwin".equals(serverResult)) {
+            output.techWin();
+        } else if ("techlose".equals(serverResult)) {
+            output.techLose();
         }
     }
 }
