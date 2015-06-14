@@ -37,32 +37,34 @@ public class ServerImplTest {
     }
 
     @Test
-    public void testGetUserBet() {
-
-    }
-
-    @Test
-    public void testSetUserBet() {
-
+    public void testSetAndGetUserBet() {
+        Server server = new ServerImpl();
+        String[] connectionResult = server.getConnection();
+        int userId = Integer.parseInt(connectionResult[1]);
+        int expectedUserBet = 50;
+        server.setUserBet(userId, expectedUserBet);
+        int actualUserBet = server.getUserBet(userId);
+        assertEquals(expectedUserBet, actualUserBet);
     }
 
     @Test
     public void testSetUserMoney() {
-
+        Server server = new ServerImpl();
+        String[] connectionResult = server.getConnection();
+        int userId = Integer.parseInt(connectionResult[1]);
+        int expectedUserMoney = 150;
+        server.setUserMoney(userId, expectedUserMoney);
+        int actualUserMoney = server.getUserMoney(userId);
+        assertEquals(expectedUserMoney, actualUserMoney);
     }
 
     @Test
-    public void testGetHand() {
+    public void testGetDeck() {
 
     }
 
     @Test
     public void testGetCardFromDeck() {
-
-    }
-
-    @Test
-    public void testGetDeck() {
 
     }
 
