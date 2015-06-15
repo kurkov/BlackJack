@@ -57,19 +57,4 @@ public class ServerImplTest {
         int actualUserMoney = server.getUserMoney(userId);
         assertEquals(expectedUserMoney, actualUserMoney);
     }
-
-    @Test
-    public void testGetDeck() {
-
-    }
-
-    @Test
-    public void testGetCardFromDeck() {
-
-    }
-
-    @Test
-    public void testMakeUserAction() {
-
-    }
 }
